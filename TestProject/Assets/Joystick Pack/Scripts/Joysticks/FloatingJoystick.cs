@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 
 public class FloatingJoystick : Joystick
 {
+    public delegate void AttackAction();
+    public static event AttackAction AttackEvent;
+
     protected override void Start()
     {
         base.Start();
@@ -21,8 +24,7 @@ public class FloatingJoystick : Joystick
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-        PlayerController playerController = GameManager.Inctance.Player.GetComponent<PlayerController>();
-        playerController.Shot();
+        AttackEvent?.Invoke();
 
         background.gameObject.SetActive(false);
         base.OnPointerUp(eventData);
