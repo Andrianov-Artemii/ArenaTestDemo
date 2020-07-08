@@ -1,10 +1,14 @@
-﻿using System.Collections;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour
 {
-    protected int _damage;
+    [SerializeField] private WeaponStats stats;
+
+    [SerializeField] private Image _attackBar;
+    [SerializeField] private Transform _attackBarPosition;
+
+    protected float _damage;
     protected int _maxAttackCount;
 
     protected float _reloadTime;
@@ -18,9 +22,9 @@ public class Weapon : MonoBehaviour
     private bool attacked;
     private float reloadTimer = 0, delayTimer = 0;
 
-    BarsSystem barsSystem;
-    
-    public void Setup(WeaponStats stats)
+    Unit owner;
+
+    private void Setup()
     {
         _damage = stats.Damage;
         _maxAttackCount = stats.MaxAttackCount;
@@ -31,17 +35,26 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
+        Setup();
+
+        owner = GetComponentInParent<Unit>();
+
         currAttackCount = _maxAttackCount;
         FloatingJoystick.AttackEvent += OnAttack;
 
-        barsSystem = GetComponentInParent<BarsSystem>();
-        barsSystem.ShotBarChanges(currAttackCount, _maxAttackCount);
+        owner.Bar.BarChanges(_attackBar, currAttackCount, _maxAttackCount);
     }
 
     public float AttackRange
     {
         get => _attackRange;
         protected set => _attackRange = value;
+    }
+
+    public int CurrAttackCount
+    {
+        get => currAttackCount;
+        protected set => currAttackCount = value;
     }
 
 
@@ -67,7 +80,7 @@ public class Weapon : MonoBehaviour
             {
                 reloadTimer = 0;
                 currAttackCount++;
-                barsSystem.ShotBarChanges(currAttackCount, _maxAttackCount);
+                owner.Bar.BarChanges(_attackBar, currAttackCount, _maxAttackCount);
             }
         }
 
@@ -83,17 +96,27 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        owner.Bar.BarPosition(_attackBar, _attackBarPosition);
+    }
+
     protected virtual void Attack() { }
 
     private void OnAttack()
     {
         if (currAttackCount > 0)
         {
-            currAttackCount--;
-            barsSystem.ShotBarChanges(currAttackCount, _maxAttackCount); 
             Attacked = true;
+            currAttackCount--;
+            owner.Bar.BarChanges(_attackBar, currAttackCount, _maxAttackCount);
             Attack();
         }
+    }
+
+    private void OnDestroy()
+    {
+        FloatingJoystick.AttackEvent -= OnAttack;
     }
 
 }

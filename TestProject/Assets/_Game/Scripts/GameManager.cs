@@ -16,6 +16,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+
+#if UNITY_EDITOR
+        _walkingJoystick.gameObject.SetActive(false);
+
+#endif
         if (Inctance == null)
             Inctance = this;
         else

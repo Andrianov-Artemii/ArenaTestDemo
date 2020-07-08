@@ -6,8 +6,8 @@ public class CharacterStats : ScriptableObject
     public string SpecializationName;
     public GameObject Character;
 
-    public int Health;
-    public int Protection;
+    public float Health;
+    public float Protection;
     public float WalkingSpeed;
     public float RunningSpeed;
 }

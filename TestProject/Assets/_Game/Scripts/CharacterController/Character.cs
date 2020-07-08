@@ -2,87 +2,105 @@
 
 public class Character : Unit
 {
-    private float _walkingSpeed;
-    private float _runningSpeed;
+    [SerializeField] private CharacterStats stats;
+    [SerializeField] private bool isEnemy;
 
-    public float WalkingSpeed { get { return _walkingSpeed; } private set { _walkingSpeed = value; } }
-    public float RunningSpeed { get { return _runningSpeed; } private set { _runningSpeed = value; } }
+    private float walkingSpeed;
+    private float runningSpeed;
 
     private FixedJoystick walkingJoystick;
     private FloatingJoystick atackingJoystick;
 
     private Vector3 moveSpeed;
     private float y;
-    private bool hit;
 
     CharacterController controllerComponent;
-    BarsSystem barsSystem;
     Animator animator;
-    Weapon weapons;
+    Weapon weapon;
 
-    public Weapon Weapon
+    private void Setup()
     {
-        get => weapons;
-        private set => weapons = value;
-    }
-
-    public void Setup(CharacterStats stats)
-    {
-        WalkingSpeed = stats.WalkingSpeed;
-        RunningSpeed = stats.RunningSpeed;
+        walkingSpeed = stats.WalkingSpeed;
+        runningSpeed = stats.RunningSpeed;
         Health.Health = stats.Health;
         Health.Protection = stats.Protection;
     }
 
     private void Start()
     {
+        Setup();
+
+        maxHealth = Health.Health;
+        ChangesHealthBar();
+
         controllerComponent = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        Weapon = GetComponentInChildren<Weapon>();
-        barsSystem = GetComponent<BarsSystem>();
+        weapon = GetComponentInChildren<Weapon>();
 
-        walkingJoystick = GameManager.Inctance.WalkingJoystick;
-        atackingJoystick = GameManager.Inctance.AtackingJoystick;
+        if (!isEnemy)
+        {
+            walkingJoystick = GameManager.Inctance.WalkingJoystick;
+            atackingJoystick = GameManager.Inctance.AtackingJoystick;
+        }
 
         FloatingJoystick.AttackEvent += CharacterAttack;
-        Health.DieEvent += Death;
     }
 
     private void Update()
     {
-        ControllingAttackJoystick();
+        if (!isEnemy)
+        {
+            ControllingAttackJoystick();
+
+            if (!weapon.Attacked)
+                CharacterWalk();
+        }
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        if (!Weapon.Attacked)
-            CharacterWalk();
+        base.FixedUpdate();
+
+        if (!isEnemy)
+        {
+            if (!weapon.Attacked && !isEnemy)
+                CharacterWalk();
+        }
     }
 
     private void CharacterWalk()
     {
         moveSpeed.y = 0;
 
-        float animSpeed = Mathf.Abs(walkingJoystick.Vertical) + Mathf.Abs(walkingJoystick.Horizontal);
-        float speed = _walkingSpeed * animSpeed;
+#if UNITY_EDITOR
+        float animSpeed = Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Horizontal"));
+        Vector3 direction = Vector3.forward * Input.GetAxis("Vertical") + Vector3.right * Input.GetAxis("Horizontal");
 
+#elif UNITY_ANDROID
+        float animSpeed = Mathf.Abs(walkingJoystick.Vertical) + Mathf.Abs(walkingJoystick.Horizontal);
+        Vector3 direction = Vector3.forward * walkingJoystick.Vertical + Vector3.right * walkingJoystick.Horizontal;
+
+#endif
+
+        float speed = walkingSpeed * animSpeed;
         animator.SetFloat("Speed", animSpeed);
 
-        Vector3 direction = Vector3.forward * walkingJoystick.Vertical + Vector3.right * walkingJoystick.Horizontal;
-        Vector3 target = Mathf.Clamp(speed, _walkingSpeed, _runningSpeed) * new Vector3(walkingJoystick.Horizontal, 0, walkingJoystick.Vertical).normalized;
+        CharacterRotate(direction);
 
+        moveSpeed = Mathf.Clamp(speed, walkingSpeed, runningSpeed) * direction * Time.deltaTime * 30;
+        controllerComponent.Move(moveSpeed * Time.deltaTime);
+    }
+
+    private void CharacterRotate(Vector3 direction)
+    {
         if (direction != Vector3.zero)
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 720);
-
-        moveSpeed = Vector3.MoveTowards(moveSpeed, target, Time.deltaTime * 300);
-
-        controllerComponent.Move(moveSpeed * Time.deltaTime);
     }
 
     private void ControllingAttackJoystick()
     {
-        LineRenderer attackArea = Weapon.AttackArea;
+        LineRenderer attackArea = weapon.AttackArea;
 
         if (Mathf.Abs(atackingJoystick.Horizontal) > 0.01f || Mathf.Abs(atackingJoystick.Vertical) > 0.01f)
         {
@@ -98,7 +116,7 @@ public class Character : Unit
 
     private void ChangingAttackAreaPosition(LineRenderer attackArea)
     {
-        float attackRange = Weapon.AttackRange;
+        float attackRange = weapon.AttackRange;
 
         RaycastHit hit;
         Transform atackTrailTransform = attackArea.transform;
@@ -123,11 +141,22 @@ public class Character : Unit
 
     private void CharacterAttack()
     {
-        transform.eulerAngles = new Vector3(0, y, 0);
-        animator.SetTrigger("Shooting");
+        if (!isEnemy && weapon.CurrAttackCount > 0)
+        {
+            transform.eulerAngles = new Vector3(0, y, 0);
+            animator.SetTrigger("Shooting");
+        }
     }
-    private void Death()
+
+    protected override void Death()
     {
+        base.Death();
         animator.SetBool("Death", true);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        FloatingJoystick.AttackEvent -= CharacterAttack;
     }
 }

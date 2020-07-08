@@ -70,11 +70,10 @@
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
     <Compile Include="Assets\_Game\Scripts\Camera\CameraFollow.cs" />
     <Compile Include="Assets\_Game\Scripts\CharacterController\Character.cs" />
-    <Compile Include="Assets\_Game\Scripts\CharacterController\Enemy.cs" />
     <Compile Include="Assets\_Game\Scripts\CharacterController\Unit.cs" />
     <Compile Include="Assets\_Game\Scripts\CharacterStats.cs" />
     <Compile Include="Assets\_Game\Scripts\GameManager.cs" />
-    <Compile Include="Assets\_Game\Scripts\Systems\BarsSystem.cs" />
+    <Compile Include="Assets\_Game\Scripts\Systems\BarSystem.cs" />
     <Compile Include="Assets\_Game\Scripts\Systems\HealthSystem.cs" />
     <Compile Include="Assets\_Game\Scripts\UI\UISpecialization.cs" />
     <Compile Include="Assets\_Game\Scripts\UI\UIStatsPanel.cs" />
@@ -615,31 +614,31 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.0f1/Editor/2019.4.1f1/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:/Users/karim/TestProject/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/Arena/ArenaTestDemo/TestProject/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup></ItemGroup>

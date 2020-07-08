@@ -3,12 +3,12 @@
 public class Bullet : MonoBehaviour
 {
     private float speed, shotRange, detroyBulletTime;
-    private int damage;
+    private float damage;
 
     private Vector3 startPosition;
     private ParticleSystem blood;
 
-    public void Setup(float speed, int damage, float detroyBulletTime, ParticleSystem blood)
+    public void Setup(float speed, float damage, float detroyBulletTime, ParticleSystem blood)
     {
         this.speed = speed;
         this.damage = damage;
@@ -19,6 +19,7 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         startPosition = transform.position;
+        Destroy(gameObject, detroyBulletTime);
     }
 
     private void Update()
@@ -30,16 +31,14 @@ public class Bullet : MonoBehaviour
     {
         float moveDistance = speed * Time.deltaTime;
         transform.Translate(Vector3.forward * moveDistance); ;
-
-        Destroy(gameObject, detroyBulletTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Unit unit = other.GetComponent<Unit>();
-
-        if (unit != null)
+        if (other.GetComponent<Unit>())
         {
+            Unit unit = other.GetComponent<Unit>();
+
             ParticleSystem bloodObj = Instantiate(blood, other.transform);
             Destroy(bloodObj.gameObject, 0.5f);
 

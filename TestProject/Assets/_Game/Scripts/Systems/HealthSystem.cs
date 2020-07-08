@@ -2,8 +2,8 @@
 
 public class HealthSystem
 {
-    private int _health;
-    private int _protection;
+    private float health;
+    private float protection;
 
     public delegate void HitAction();
     public event HitAction HitEvent;
@@ -11,26 +11,26 @@ public class HealthSystem
     public delegate void DieAction();
     public event DieAction DieEvent;
 
-    public int Health
+    public float Health
     {
-        get => _health;
-        set => _health = value;
+        get => health;
+        set => health = value;
     }
-    public int Protection
+    public float Protection
     {
-        get => _protection;
-        set => _protection = value;
+        get => protection;
+        set => protection = value;
     }
 
-    public HealthSystem (int health, int protection)
+    public HealthSystem (float health, float protection)
     {
         Health = health;
         Protection = protection;
     }
 
-    public void GetDamage(int damage)
+    public void GetDamage(float damage)
     {
-        Health -= (int)(damage - Protection * 0.6f);
+        Health -= damage - Protection * 0.6f;
         HitEvent?.Invoke();
 
         if (Health <= 0)
