@@ -2,25 +2,15 @@
 
 public class HealthSystem
 {
-    private float health;
-    private float protection;
+    public float Health;
+    public float Protection;
 
     public delegate void HitAction();
     public event HitAction HitEvent;
 
     public delegate void DieAction();
     public event DieAction DieEvent;
-
-    public float Health
-    {
-        get => health;
-        set => health = value;
-    }
-    public float Protection
-    {
-        get => protection;
-        set => protection = value;
-    }
+    
 
     public HealthSystem (float health, float protection)
     {

@@ -76,6 +76,12 @@ public class Character : Unit
 #if UNITY_EDITOR
         float animSpeed = Mathf.Abs(Input.GetAxis("Vertical")) + Mathf.Abs(Input.GetAxis("Horizontal"));
         Vector3 direction = Vector3.forward * Input.GetAxis("Vertical") + Vector3.right * Input.GetAxis("Horizontal");
+        if (direction.x > 1) direction.x = 1;
+        if (direction.y > 1) direction.y = 1;
+        if (direction.z > 1) direction.z = 1;
+        if (direction.x < -1) direction.x = -1;
+        if (direction.y < -1) direction.y = -1;
+        if (direction.z < -1) direction.z = -1;
 
 #elif UNITY_ANDROID
         float animSpeed = Mathf.Abs(walkingJoystick.Vertical) + Mathf.Abs(walkingJoystick.Horizontal);
@@ -148,8 +154,10 @@ public class Character : Unit
         }
     }
 
+    [SerializeField] private AudioClip clip;
     protected override void Death()
     {
+        GetComponent<AudioSource>().PlayOneShot(clip);
         base.Death();
         animator.SetBool("Death", true);
     }
